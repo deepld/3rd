@@ -67,3 +67,4 @@ log/
 output/
 download/
 */cmake-build-debug/
+lib/
