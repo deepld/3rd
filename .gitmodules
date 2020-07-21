@@ -10,3 +10,9 @@
 [submodule "protobuf"]
 	path = protobuf
 	url = https://github.com/protocolbuffers/protobuf.git
+[submodule "jemalloc"]
+	path = jemalloc
+	url = https://github.com/jemalloc/jemalloc.git
+[submodule "folly"]
+	path = folly
+	url = https://github.com/facebook/folly.git
