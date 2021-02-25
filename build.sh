@@ -1,5 +1,26 @@
-CLEAN=${1-0}
+## 用法
+# normal build: sh build.sh 
+# clean build:  sh build.sh 1  
+
 BASE=$(cd "$(dirname "$0")";pwd)
+
+## 添加路径
+BASH_3rd=~/.bash_3rd
+cat << EOF > $BASH_3rd
+   BASE=$BASE
+   export CMAKE_INCLUDE_PATH=\$BASE/include:\$CMAKE_INCLUDE_PATH
+   export CMAKE_LIBRARY_PATH=\$BASE/lib:\$CMAKE_LIBRARY_PATH
+   export PATH=\$PATH:\$BASE/bin
+EOF
+
+if ! grep -q "$BASH_3rd" ~/.bashrc; then
+cat << EOF >> ~/.bashrc
+   source $BASH_3rd
+EOF
+source $BASH_3rd  ## 当前立即生效
+fi
+
+CLEAN=${1-0}
 OUTPUT=output
 mkdir -p $BASE/include $BASE/lib $BASE/bin
 
