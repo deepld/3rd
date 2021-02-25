@@ -66,10 +66,10 @@ build () {
       cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$OUTPUT .
    fi
 
-   make -j4 && make install 
+   make -j && make install 
 
    \cp -rf $OUTPUT/include/* $BASE/include
-   \cp -rf $OUTPUT/lib/* $BASE/lib
+   \cp -rf $OUTPUT/lib*/* $BASE/lib
 
    if [ "$3" == "bin" ]; then
       \cp -rf $OUTPUT/bin/* $BASE/bin
