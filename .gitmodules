@@ -16,3 +16,6 @@
 [submodule "folly"]
 	path = folly
 	url = https://github.com/facebook/folly.git
+[submodule "brpc"]
+	path = brpc
+	url = ./brpc
