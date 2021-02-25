@@ -18,7 +18,7 @@
 	url = https://github.com/facebook/folly.git
 [submodule "brpc"]
 	path = brpc
-	url = ./brpc
+	url = https://github.com/apache/incubator-brpc.git
 [submodule "leveldb"]
 	path = leveldb
-	url = ./leveldb
+	url = https://github.com/google/leveldb.git
