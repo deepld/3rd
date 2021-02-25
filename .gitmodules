@@ -19,3 +19,6 @@
 [submodule "brpc"]
 	path = brpc
 	url = ./brpc
+[submodule "leveldb"]
+	path = leveldb
+	url = ./leveldb
