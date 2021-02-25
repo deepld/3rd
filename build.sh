@@ -1,6 +1,12 @@
+
 ## 用法
-# normal build: sh build.sh 
-# clean build:  sh build.sh 1  
+# git submodule update --init --recursive
+# normal build: 
+#    1) sh build.sh  
+#    2) sh build.sh glog
+# clean build:  
+#    1) sh build.sh --clean 
+#    2) sh build.sh --clean [glog|brpc|...] 
 
 BASE=$(cd "$(dirname "$0")";pwd)
 
@@ -20,17 +26,36 @@ EOF
 source $BASH_3rd  ## 当前立即生效
 fi
 
-CLEAN=${1-0}
 OUTPUT=output
 mkdir -p $BASE/include $BASE/lib $BASE/bin
+
+ # set -x
+POSITIONAL=()
+for key in "$@"; do
+case $key in
+   --clean) 
+   IS_CLEAN="1"
+   shift;;
+   *)
+   POSITIONAL+=("$1") # save it in an array for later
+   shift # past argument
+   ;;
+esac
+done
+set -- "${POSITIONAL[@]}" # restore positional parameters
 
 build () {
    echo "=========================================="
    echo "try to build $1"
    
    pushd $1
-   [ "$CLEAN" == "1" ] && echo "clean build" && git clean -xdf
-
+   if [ "$IS_CLEAN" == "1" ]; then 
+      echo "clean build - $1"
+      git clean -xdf
+      popd
+      return
+   fi
+   
    BUILD_PATH=${2-builds}
    mkdir -p $BUILD_PATH
    pushd $BUILD_PATH
@@ -41,7 +66,7 @@ build () {
       cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$OUTPUT .
    fi
 
-   make -j && make install 
+   make -j4 && make install 
 
    \cp -rf $OUTPUT/include/* $BASE/include
    \cp -rf $OUTPUT/lib/* $BASE/lib
@@ -54,8 +79,13 @@ build () {
    popd
 }
 
-build gflags
-build googletest
-build protobuf cmake bin
-build leveldb
-build brpc
+if [ -d "$1" ]; then
+    build $1
+else
+    build gflags
+    build googletest
+    build protobuf cmake bin
+    build leveldb
+    build brpc
+fi
+
