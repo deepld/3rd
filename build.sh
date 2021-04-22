@@ -7,6 +7,7 @@
 # clean build:  
 #    1) sh build.sh --clean 
 #    2) sh build.sh --clean [glog|brpc|...] 
+#    3) sh build.sh --api_version=10.14
 
 BASE=$(cd "$(dirname "$0")";pwd)
 
@@ -44,6 +45,9 @@ case $key in
    --clean) 
    IS_CLEAN="1"
    shift;;
+   --api_version=*)
+   MAC_API_VERSION=CXXFLAGS=$CXXFLAGS-mmacosx-version-min=${key#*=}
+   shift;; 
    *)
    POSITIONAL+=("$1") # save it in an array for later
    shift # past argument
@@ -109,7 +113,7 @@ build () {
 
    CMAKE_FLAGS="$CMAKE_FLAGS $BUILD_LIBRARY"
    cmake $SOURCE_PATH $CMAKE_FLAGS 
-   make -j && make install 
+   make -j $MAC_API_VERSION && make install 
 
    \cp -rf $OUTPUT/include/* $BASE/include
    \cp -rf $OUTPUT/lib*/* $BASE/lib
@@ -133,5 +137,6 @@ else
     build protobuf --source=. --build=cmake --copy_bin
     build leveldb
     build brpc
+    build glog
 fi
 
