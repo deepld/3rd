@@ -72,3 +72,4 @@ lib/
 builds/
 /cmake-build-debug/
 /.idea/
+include/
