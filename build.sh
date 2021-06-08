@@ -66,19 +66,20 @@ fi
 build () {
    echo "=========================================="
    echo "try to build $1"
-
-   pushd $1
-   if [ "$IS_CLEAN" == "1" ]; then 
-      echo "clean build - $1"
-      git clean -xdf
-      popd
-      return
-   fi
    
    SOURCE_PATH=".."
    BUILD_PATH=builds
    BUILD_LIBRARY="-DBUILD_SHARED_LIBS=0"
    CMAKE_FLAGS="-DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$OUTPUT -DCMAKE_CXX_FLAGS=-fPIC"
+
+   pushd $1
+   if [ "$IS_CLEAN" == "1" ]; then 
+      echo "clean build - $1"
+      git clean -xdf
+      rm -rf $BUILD_PATH
+      popd
+      return
+   fi
 
    POSITIONAL=()
    for key in "$@"; do
