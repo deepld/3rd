@@ -15,10 +15,10 @@ BASE=$(cd "$(dirname "$0")";pwd)
 ## 添加路径
 BASH_3rd=~/.bash_3rd
 cat << EOF > $BASH_3rd
-   BASE=$BASE
-   export CMAKE_INCLUDE_PATH=\$BASE/include:\$CMAKE_INCLUDE_PATH
-   export CMAKE_LIBRARY_PATH=\$BASE/lib:\$CMAKE_LIBRARY_PATH
-   export PATH=\$PATH:\$BASE/bin
+   THIRD_PATH=$BASE
+   export CMAKE_INCLUDE_PATH=\$THIRD_PATH/include:\$CMAKE_INCLUDE_PATH
+   export CMAKE_LIBRARY_PATH=\$THIRD_PATH/lib:\$CMAKE_LIBRARY_PATH
+   export PATH=\$PATH:\$THIRD_PATH/bin
 EOF
 
 if ! grep -q "$BASH_3rd" ~/.bashrc; then
@@ -77,6 +77,7 @@ build () {
       echo "clean build - $1"
       git clean -xdf
       rm -rf $BUILD_PATH
+      # for protobuf, remove /home/deep.ld/repo/3rd/protobuf/cmake/CMakeCache.txt
       popd
       return
    fi
