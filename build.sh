@@ -13,27 +13,17 @@ BASE=$(cd "$(dirname "$0")";pwd)
 
 # ================================================================
 ## 添加路径
-BASH_3rd=~/.bash_3rd
-cat << EOF > $BASH_3rd
-   THIRD_PATH=$BASE
-   export CMAKE_INCLUDE_PATH=\$THIRD_PATH/include:\$CMAKE_INCLUDE_PATH
-   export CMAKE_LIBRARY_PATH=\$THIRD_PATH/lib:\$CMAKE_LIBRARY_PATH
-   export PATH=\$PATH:\$THIRD_PATH/bin
-EOF
-
-if ! grep -q "$BASH_3rd" ~/.bashrc; then
-cat << EOF >> ~/.bashrc
-   source $BASH_3rd
-EOF
-source $BASH_3rd  ## 当前立即生效
-fi
+THIRD_PATH=$BASE
+export CMAKE_INCLUDE_PATH=$THIRD_PATH/include:$CMAKE_INCLUDE_PATH
+export CMAKE_LIBRARY_PATH=$THIRD_PATH/lib:$CMAKE_LIBRARY_PATH
+export PATH=$PATH:$THIRD_PATH/bin
 
 # ================================================================
 OUTPUT=output
 LOG_PATH=/tmp/3rd.log
 
 echo "" > $LOG_PATH
-echo "copy: \cp -rf $OUTPUT/lib*/* $BASE/lib" >> $LOG_PATH
+echo "copy:† \cp -rf $OUTPUT/lib*/* $BASE/lib" >> $LOG_PATH
 echo "copy: \cp -rf $OUTPUT/include/* $BASE/include" >> $LOG_PATH
 echo "copy: \cp -rf $OUTPUT/lib*/* $BASE/lib" >> $LOG_PATH
 mkdir -p $BASE/include $BASE/lib $BASE/bin
@@ -113,10 +103,26 @@ build () {
    mkdir -p $BUILD_PATH
    pushd $BUILD_PATH
 
+   ## fix error
+   if [ "$1" == "leveldb" ]; then 
+      echo "\n******"
+      echo "remove [sigma_gn], vim leveldb/third_party/benchmark/src/complexity.cc"
+      echo "******\n"
+   elif [ "$1" == "glog" ]; then 
+      echo "\n******"
+      echo "change WITH_GTEST OFF, vim glog/CMakeLists.txt"
+      echo "******\n"
+   fi
+   
+   ## compile
    CMAKE_FLAGS="$CMAKE_FLAGS $BUILD_LIBRARY"
    cmake $SOURCE_PATH $CMAKE_FLAGS 
-   make -j $MAC_API_VERSION && make install 
+   make -j $MAC_API_VERSION && make install
 
+   ## copy output
+   if [ "$1" == "protobuf" ]; then 
+      \cp -rf ../src/google/protobuf/*.inc $OUTPUT/include/google/protobuf 
+   fi   
    \cp -rf $OUTPUT/include/* $BASE/include
    \cp -rf $OUTPUT/lib*/* $BASE/lib
    if [ "$COPY_BIN" == "1" ]; then
