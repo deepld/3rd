@@ -106,11 +106,11 @@ build () {
    ## fix error
    if [ "$1" == "leveldb" ]; then 
       echo "\n******"
-      echo "remove [sigma_gn], vim leveldb/third_party/benchmark/src/complexity.cc"
+      echo "remove [sigma_gn] at line 85, vim leveldb/third_party/benchmark/src/complexity.cc"
       echo "******\n"
    elif [ "$1" == "snappy" ]; then 
       echo "\n******"
-      echo "remove [sigma_gn], vim snappy/third_party/benchmark/src/complexity.cc"
+      echo "remove [sigma_gn] at line 85, vim snappy/third_party/benchmark/src/complexity.cc"
       echo "******\n"
    elif [ "$1" == "glog" ]; then 
       echo "\n******"
