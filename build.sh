@@ -150,5 +150,6 @@ else
     build leveldb
     build brpc
     build glog
+    build snappy
 fi
 
