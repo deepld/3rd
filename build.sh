@@ -114,7 +114,7 @@ build () {
       echo "******\n"
    elif [ "$1" == "glog" ]; then 
       echo "\n******"
-      echo "change WITH_GTEST OFF, vim glog/CMakeLists.txt"
+      echo "change WITH_GTEST OFF at line 42, vim glog/CMakeLists.txt"
       echo "******\n"
    fi
    
