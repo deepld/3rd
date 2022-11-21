@@ -28,3 +28,6 @@
 [submodule "gperftools"]
 	path = gperftools
 	url = https://github.com/gperftools/gperftools.git
+[submodule "FlameGraph"]
+	path = FlameGraph
+	url = https://github.com/brendangregg/FlameGraph.git
